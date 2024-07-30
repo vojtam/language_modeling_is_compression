@@ -96,7 +96,6 @@ def compress(
   Returns:
     The compressed data.
   """
-  params = _retrieve_model_params()
   predict_fn = _retrieve_predict_fn(params)
 
   # Convert the `data` into an array of integers (representing the bytes).
@@ -151,7 +150,6 @@ def decompress(
   Returns:
     The decompressed data.
   """
-  params = _retrieve_model_params()
   predict_fn = _retrieve_predict_fn(params)
 
   data_iter = iter(utils.bytes_to_bits(data, num_padded_bits=num_padded_bits))
