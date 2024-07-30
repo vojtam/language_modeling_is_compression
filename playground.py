@@ -1,4 +1,5 @@
 from language_modeling_is_compression.compressors import language_model
+import random
 
 length = 32
 data = random.randbytes(length)
