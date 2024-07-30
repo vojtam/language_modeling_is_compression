@@ -79,7 +79,7 @@ def get_seq_file_data() -> bytes:
     f.write('ACGT')
     f.close()
   with open('seq_data', 'rb') as file:
-    return file.read(sequence_length)
+    return file.read()
 
 
 def _extract_audio_patches(sample: bytes) -> Iterator[bytes]:
