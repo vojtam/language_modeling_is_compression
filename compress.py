@@ -125,6 +125,7 @@ def evaluate_compressor_unchunked(
   Returns:
     The compression rate and the total running time.
   """
+  print(get_data_generator_fn())
   all_data = bytearray()
   for data in tqdm.tqdm(get_data_generator_fn()):
     all_data += data
