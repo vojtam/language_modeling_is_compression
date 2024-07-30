@@ -22,6 +22,9 @@ from typing import Callable
 import haiku as hk
 import numpy as np
 
+from transformers import AutoTokenizer, AutoModel
+import torch
+
 from language_modeling_is_compression import arithmetic_coder
 from language_modeling_is_compression import constants
 from language_modeling_is_compression import transformer
@@ -45,16 +48,30 @@ def _retrieve_model_params() -> hk.Params:
     ) from exc
 
 
-def _retrieve_predict_fn(
+"""def _retrieve_predict_fn(
     params: hk.Params,
 ) -> Callable[[np.ndarray], np.ndarray]:
-  """Returns the prediction function for the trained model."""
+  #Returns the prediction function for the trained model
   config = transformer.TransformerConfig(vocab_size=constants.ALPHABET_SIZE)
   model = hk.transform(
       functools.partial(transformer.transformer_decoder, config=config)
   )
-  return lambda x: model.apply(params, None, x)
+  return lambda x: model.apply(params, None, x)"""
 
+
+def _retrieve_predict_fn() -> Callable[[str], torch.Tensor]:
+    MODEL = 'dnagpt/human_gpt2-v1'
+    model = GPT2LMHeadModel.from_pretrained(model_name)
+    tokenizer = GPT2Tokenizer.from_pretrained(model_name)
+    
+    def predict_fn(dna: str) -> torch.Tensor:
+        # Tokenize the input text
+        input_ids = tokenizer.encode(dna, return_tensors="pt")
+        # Get the model outputs (logits)
+        outputs = model(input_ids)
+        return outputs.logits
+    
+    return predict_fn
 
 def compress(
     data: bytes,
