@@ -39,7 +39,7 @@ _COMPRESSOR = flags.DEFINE_enum(
 )
 _DATASET = flags.DEFINE_enum(
     'dataset',
-    'enwik9',
+    'seq_data',
     data_loaders.GET_DATA_GENERATOR_FN_DICT.keys(),
     'Dataset to use.',
 )
