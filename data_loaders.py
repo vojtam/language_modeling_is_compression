@@ -146,6 +146,7 @@ def get_imagenet_iterator(
 
 
 GET_DATA_GENERATOR_FN_DICT = {
+    'seq_data': get_seq_file_iterator,
     'enwik9': get_enwik9_iterator,
     'imagenet': get_imagenet_iterator,
     'librispeech': get_librispeech_iterator,
