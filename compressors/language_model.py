@@ -70,10 +70,10 @@ def _retrieve_predict_fn():
 
     def predict_fn(x: np.ndarray) -> np.ndarray:
         # Convert numpy array to string
-        dna_sequence = ''.join(chr(i) for i in x)
+        # dna_sequence = ''.join(chr(i) for i in x)
         
         # Tokenize the input
-        inputs = tokenizer(dna_sequence, return_tensors='pt')
+        inputs = tokenizer(x, return_tensors='pt')
         
         # Generate logits
         with torch.no_grad():
