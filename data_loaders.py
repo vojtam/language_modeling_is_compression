@@ -68,10 +68,18 @@ def get_seq_file_iterator(
     f = open('seq_data', 'w')
     f.write('ACGT')
     f.close()
-  with open('seq_data', 'w') as file:
+  with open('seq_data', 'rb') as file:
     for _ in range(num_chunks):
       all_chunks.append(file.read(sequence_length))
   return iter(all_chunks)
+
+def get_seq_file_data() -> bytes:
+  if not os.path.exists('seq_data'):
+    f = open('seq_data', 'w')
+    f.write('ACGT')
+    f.close()
+  with open('seq_data', 'rb') as file:
+    return file.read(sequence_length)
 
 
 def _extract_audio_patches(sample: bytes) -> Iterator[bytes]:
@@ -146,7 +154,8 @@ def get_imagenet_iterator(
 
 
 GET_DATA_GENERATOR_FN_DICT = {
-    'seq_data': get_seq_file_iterator,
+    'seq_data': get_seq_file_data,
+    'seq_data_iter': get_seq_file_iterator,
     'enwik9': get_enwik9_iterator,
     'imagenet': get_imagenet_iterator,
     'librispeech': get_librispeech_iterator,
