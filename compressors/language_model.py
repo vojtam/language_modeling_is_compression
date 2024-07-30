@@ -61,8 +61,8 @@ def _retrieve_model_params() -> hk.Params:
 
 def _retrieve_predict_fn() -> Callable[[str], torch.Tensor]:
     MODEL = 'dnagpt/human_gpt2-v1'
-    model = AutoModel.from_pretrained(model_name)
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    model = AutoModel.from_pretrained(MODEL)
+    tokenizer = AutoTokenizer.from_pretrained(MODEL)
     
     def predict_fn(dna: str) -> torch.Tensor:
         # Tokenize the input text
