@@ -175,14 +175,22 @@ def main(_) -> None:
     else:
       mask_fn = utils.right_shift_bytes_by_one
 
-    chunked_rate, chunked_time = evaluate_compressor_chunked(
+    # chunked_rate, chunked_time = evaluate_compressor_chunked(
+    #     compress_fn=compress_fn,
+    #     get_data_generator_fn=get_data_generator_fn,
+    #     num_chunks=_NUM_CHUNKS.value,
+    #     count_header_only_once=False,
+    #     mask_fn=mask_fn,
+    # )
+    unchunked_rate, unchunked_time = evaluate_compressor_unchunked(
         compress_fn=compress_fn,
         get_data_generator_fn=get_data_generator_fn,
         num_chunks=_NUM_CHUNKS.value,
-        count_header_only_once=False,
-        mask_fn=mask_fn,
     )
-    logging.info('Chunked: %.1f [%.1fs]', 100 * chunked_rate, chunked_time)
+    logging.info(
+      'Unchunked: %.1f [%.1fs]', 100 * unchunked_rate, unchunked_time
+    )
+    # logging.info('Chunked: %.1f [%.1fs]', 100 * chunked_rate, chunked_time)
 
 
 if __name__ == '__main__':
