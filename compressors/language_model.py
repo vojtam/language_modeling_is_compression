@@ -24,6 +24,7 @@ import numpy as np
 
 from transformers import AutoTokenizer, AutoModel
 import torch
+import numpy as np
 
 from language_modeling_is_compression import arithmetic_coder
 from language_modeling_is_compression import constants
@@ -59,18 +60,31 @@ def _retrieve_model_params() -> hk.Params:
   return lambda x: model.apply(params, None, x)"""
 
 
-def _retrieve_predict_fn() -> Callable[[str], torch.Tensor]:
-    MODEL = 'dnagpt/human_gpt2-v1'
-    model = AutoModel.from_pretrained(MODEL)
-    tokenizer = AutoTokenizer.from_pretrained(MODEL)
-    
-    def predict_fn(dna: str) -> torch.Tensor:
-        # Tokenize the input text
-        input_ids = tokenizer.encode(dna, return_tensors="pt")
-        # Get the model outputs (logits)
-        outputs = model(input_ids)
-        return outputs.logits
-    
+
+def _retrieve_predict_fn():
+    """Returns the prediction function for the pretrained model."""
+    tokenizer = AutoTokenizer.from_pretrained('dnagpt/human_gpt2-v1')
+    model = AutoModelForCausalLM.from_pretrained('dnagpt/human_gpt2-v1')
+    model.eval()  # Set the model to evaluation mode
+
+    def predict_fn(x: np.ndarray) -> np.ndarray:
+        # Convert numpy array to string
+        dna_sequence = ''.join(chr(i) for i in x)
+        
+        # Tokenize the input
+        inputs = tokenizer(dna_sequence, return_tensors='pt')
+        
+        # Generate logits
+        with torch.no_grad():
+            outputs = model(**inputs)
+            logits = outputs.logits
+        
+        # Convert logits to probabilities
+        probs = torch.softmax(logits, dim=-1).numpy()
+        
+        # We only need the probabilities for the next token at each step
+        return probs[:, :-1, :]  # Shape: [1, sequence_length, vocab_size]
+
     return predict_fn
 
 def compress(
