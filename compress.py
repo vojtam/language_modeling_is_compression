@@ -113,8 +113,7 @@ def evaluate_compressor_chunked(
 
 def evaluate_compressor_unchunked(
     compress_fn: compressor.Compressor,
-    get_data_generator_fn: Callable[[], Generator[bytes, None, None]],
-    num_chunks: int,
+    get_data_generator_fn: Callable[[], Generator[bytes, None, None]]
 ) -> tuple[float, float]:
   """Evaluates the compressor on the unchunked dataset.
 
@@ -184,8 +183,7 @@ def main(_) -> None:
     # )
     unchunked_rate, unchunked_time = evaluate_compressor_unchunked(
         compress_fn=compress_fn,
-        get_data_generator_fn=get_data_generator_fn,
-        num_chunks=_NUM_CHUNKS.value,
+        get_data_generator_fn=get_data_generator_fn
     )
     logging.info(
       'Unchunked: %.1f [%.1fs]', 100 * unchunked_rate, unchunked_time
