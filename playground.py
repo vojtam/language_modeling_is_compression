@@ -1,10 +1,13 @@
 from language_modeling_is_compression.compressors import language_model
 import random
 
-length = 32
-data = random.randbytes(length)
+
+filename = 'seq_file'
+with open(filename, 'rb') as f:
+    data = f.read()
+length = len(data)
 compressed_data, num_padded_bits = language_model.compress(
-  data,
+  data.decode(),
   return_num_padded_bits=True,
   use_slow_lossless_compression=True,
 )
