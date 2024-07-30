@@ -22,7 +22,8 @@ from typing import Callable
 import haiku as hk
 import numpy as np
 
-from transformers import AutoTokenizer, AutoModel
+from transformers import AutoTokenizer, AutoModel, AutoModelForCausalLM
+
 import torch
 import numpy as np
 
