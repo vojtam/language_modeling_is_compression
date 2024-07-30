@@ -96,7 +96,7 @@ def compress(
   Returns:
     The compressed data.
   """
-  predict_fn = _retrieve_predict_fn(params)
+  predict_fn = _retrieve_predict_fn()
 
   # Convert the `data` into an array of integers (representing the bytes).
   sequence_array = np.frombuffer(data, dtype=np.uint8)
@@ -150,7 +150,7 @@ def decompress(
   Returns:
     The decompressed data.
   """
-  predict_fn = _retrieve_predict_fn(params)
+  predict_fn = _retrieve_predict_fn()
 
   data_iter = iter(utils.bytes_to_bits(data, num_padded_bits=num_padded_bits))
 
