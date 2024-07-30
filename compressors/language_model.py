@@ -68,10 +68,10 @@ def _retrieve_predict_fn():
     model = AutoModelForCausalLM.from_pretrained('dnagpt/human_gpt2-v1')
     model.eval()  # Set the model to evaluation mode
 
-    def predict_fn(dna_sequence: str) -> np.ndarray:
+    def predict_fn(x) -> np.ndarray:
 
         # Tokenize the input
-        inputs = tokenizer(dna_sequence, return_tensors='pt')
+        inputs = tokenizer(x.decode(), return_tensors='pt')
 
         # Generate logits
         with torch.no_grad():
@@ -111,18 +111,18 @@ def compress(
   predict_fn = _retrieve_predict_fn()
 
   # Convert the `data` into an array of integers (representing the bytes).
-  sequence_array = np.frombuffer(data, dtype=np.uint8)
-
+  dna_seq = data.decode()
   if use_slow_lossless_compression:
     log_probs = list()
-    for subsequence_length in range(len(sequence_array)):
+    for subsequence_length, symbol in enumerate(dna_seq):
       subsequence_probs = predict_fn(
-          sequence_array[None, : subsequence_length + 1]
+          dna_seq[None, : subsequence_length + 1]
       )
+      print(dna_seq[None, : subsequence_length + 1])
       log_probs.append(subsequence_probs[0, -1])
     log_probs = np.vstack(log_probs)
   else:
-    log_probs = predict_fn(sequence_array[None])[0, ...]
+    log_probs = predict_fn(dna_seq[None])[0, ...]
   probs = np.exp(log_probs)
 
   output = list()
@@ -131,7 +131,7 @@ def compress(
       precision=constants.ARITHMETIC_CODER_PRECISION,
       output_fn=output.append,
   )
-  for pdf, symbol in zip(probs, sequence_array):
+  for pdf, symbol in zip(probs, dna_seq):
     encoder.encode(utils.normalize_pdf_for_arithmetic_coding(pdf), symbol)
   encoder.terminate()
 
