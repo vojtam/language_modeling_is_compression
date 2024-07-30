@@ -113,14 +113,13 @@ def evaluate_compressor_chunked(
 
 def evaluate_compressor_unchunked(
     compress_fn: compressor.Compressor,
-    get_data_generator_fn: Callable[[], Generator[bytes, None, None]]
+    get_data_generator_fn
 ) -> tuple[float, float]:
   """Evaluates the compressor on the unchunked dataset.
 
   Args:
     compress_fn: The function that compresses data.
     get_data_generator_fn: The function that creates a data generator.
-    num_chunks: The number of chunks to consider.
 
   Returns:
     The compression rate and the total running time.
