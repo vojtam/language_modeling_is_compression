@@ -33,7 +33,7 @@ from language_modeling_is_compression.compressors import compressor
 
 _COMPRESSOR = flags.DEFINE_enum(
     'compressor',
-    'gzip',
+    'language_model',
     compressor.COMPRESS_FN_DICT.keys(),
     'Compressor to use.',
 )
