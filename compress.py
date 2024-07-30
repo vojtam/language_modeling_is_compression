@@ -127,7 +127,7 @@ def evaluate_compressor_unchunked(
     The compression rate and the total running time.
   """
   all_data = bytearray()
-  for data in tqdm.tqdm(get_data_generator_fn(), total=num_chunks):
+  for data in tqdm.tqdm(get_data_generator_fn()):
     all_data += data
   all_data = bytes(all_data)
 
