@@ -68,22 +68,19 @@ def _retrieve_predict_fn():
     model = AutoModelForCausalLM.from_pretrained('dnagpt/human_gpt2-v1')
     model.eval()  # Set the model to evaluation mode
 
-    def predict_fn(x: np.ndarray) -> np.ndarray:
-        # Convert numpy array to string
-        # dna_sequence = ''.join(chr(i) for i in x)
-        
+    def predict_fn(dna_sequence: str) -> np.ndarray:
+
         # Tokenize the input
-        inputs = tokenizer(x, return_tensors='pt')
-        
+        inputs = tokenizer(dna_sequence, return_tensors='pt')
+
         # Generate logits
         with torch.no_grad():
             outputs = model(**inputs)
             logits = outputs.logits
-        
+
         # Convert logits to probabilities
         probs = torch.softmax(logits, dim=-1).numpy()
-        
-        # We only need the probabilities for the next token at each step
+
         return probs[:, :-1, :]  # Shape: [1, sequence_length, vocab_size]
 
     return predict_fn
