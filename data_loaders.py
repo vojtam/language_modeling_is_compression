@@ -58,6 +58,22 @@ def get_enwik9_iterator(
   return iter(all_chunks)
 
 
+def get_seq_file_iterator(
+   num_chunks: int = constants.NUM_CHUNKS,
+    sequence_length: int = constants.CHUNK_SIZE_BYTES,
+) -> Iterator[bytes]:
+  """Returns an iterator for a file with sequences called seq_data."""
+  all_chunks = []
+  if not os.path.exists('seq_data'):
+    f = open('seq_data', 'w')
+    f.write('ACGT')
+    f.close()
+  with open('seq_data', 'w') as file:
+    for _ in range(num_chunks):
+      all_chunks.append(file.read(sequence_length))
+  return iter(all_chunks)
+
+
 def _extract_audio_patches(sample: bytes) -> Iterator[bytes]:
   patches = np.array_split(
       np.frombuffer(sample, dtype=np.uint8),
