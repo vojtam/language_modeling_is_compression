@@ -143,8 +143,8 @@ def main(_) -> None:
 
   compress_fn = compressor.COMPRESS_FN_DICT[_COMPRESSOR.value]
   get_data_generator_fn = functools.partial(
-      data_loaders.GET_DATA_GENERATOR_FN_DICT[_DATASET.value],
-      num_chunks=_NUM_CHUNKS.value,
+      data_loaders.GET_DATA_GENERATOR_FN_DICT[_DATASET.value]
+      # num_chunks=_NUM_CHUNKS.value,
   )
 
   if _COMPRESSOR.value in compressor.COMPRESSOR_TYPES['classical']:
