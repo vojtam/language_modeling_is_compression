@@ -111,7 +111,7 @@ def compress(
   predict_fn = _retrieve_predict_fn()
 
   # Convert the `data` into an array of integers (representing the bytes).
-  dna_seq = data.decode()
+  dna_seq = np.array(list(data.decode()))
   if use_slow_lossless_compression:
     log_probs = list()
     for subsequence_length, symbol in enumerate(dna_seq):
