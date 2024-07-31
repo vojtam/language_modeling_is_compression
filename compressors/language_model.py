@@ -69,19 +69,30 @@ def _retrieve_predict_fn():
     model.eval()  # Set the model to evaluation mode
 
     def predict_fn(x) -> np.ndarray:
-
+        seq = "".join(x[0])
         # Tokenize the input
-        inputs = tokenizer(x.decode(), return_tensors='pt')
+        inputs = tokenizer(seq, return_tensors='pt')
 
         # Generate logits
         with torch.no_grad():
             outputs = model(**inputs)
             logits = outputs.logits
 
-        # Convert logits to probabilities
-        probs = torch.softmax(logits, dim=-1).numpy()
+            # Convert logits to probabilities
+            probs = torch.softmax(logits, dim=-1).numpy()
 
-        return probs[:, :-1, :]  # Shape: [1, sequence_length, vocab_size]
+        dna_probs = {}
+        epsilon = 1e-6
+
+        for base in 'ACGT':
+            base_token_id = tokenizer.encode(base)[0]
+            print(probs[0, 0, base_token_id].item())
+            dna_probs[base] = max(probs[0, 0, base_token_id].item(), epsilon)
+
+        total = sum(dna_probs.values())
+        dna_probs = {base: prob / total for base, prob in dna_probs.items()}
+        #print(dna_probs)
+        return dna_probs
 
     return predict_fn
 
@@ -118,8 +129,7 @@ def compress(
       subsequence_probs = predict_fn(
           dna_seq[None, : subsequence_length + 1]
       )
-      print(dna_seq[None, : subsequence_length + 1])
-      log_probs.append(subsequence_probs[0, -1])
+      log_probs.append(subsequence_probs.values)
     log_probs = np.vstack(log_probs)
   else:
     log_probs = predict_fn(dna_seq[None])[0, ...]
