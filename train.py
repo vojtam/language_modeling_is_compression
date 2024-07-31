@@ -29,9 +29,9 @@ import optax
 import tqdm
 import tree
 
-from language_modeling_is_compression import constants
-from language_modeling_is_compression import data_loaders
-from language_modeling_is_compression import transformer
+from lmic import constants
+from lmic import data_loaders
+from lmic import transformer
 
 
 def _to_marginals(

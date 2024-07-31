@@ -27,10 +27,10 @@ from transformers import AutoTokenizer, AutoModel, AutoModelForCausalLM
 import torch
 import numpy as np
 
-from language_modeling_is_compression import arithmetic_coder
-from language_modeling_is_compression import constants
-from language_modeling_is_compression import transformer
-from language_modeling_is_compression import utils
+from lmic import arithmetic_coder
+from lmic import constants
+from lmic import transformer
+from lmic import utils
 
 
 def _retrieve_model_params() -> hk.Params:

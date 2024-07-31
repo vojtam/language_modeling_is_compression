@@ -25,10 +25,10 @@ from absl import flags
 from absl import logging
 import tqdm
 
-from language_modeling_is_compression import constants
-from language_modeling_is_compression import data_loaders
-from language_modeling_is_compression import utils
-from language_modeling_is_compression.compressors import compressor
+from lmic import constants
+from lmic import data_loaders
+from lmic import utils
+from lmic import compressor
 
 
 _COMPRESSOR = flags.DEFINE_enum(
@@ -125,9 +125,7 @@ def evaluate_compressor_unchunked(
     The compression rate and the total running time.
   """
   print(get_data_generator_fn())
-  all_data = bytearray()
-  for data in tqdm.tqdm(get_data_generator_fn()):
-    all_data += data
+  all_data = bytearray(get_data_generator_fn())
   all_data = bytes(all_data)
 
   t0 = time.perf_counter()

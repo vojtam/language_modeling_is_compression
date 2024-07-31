@@ -1,4 +1,4 @@
-from language_modeling_is_compression.compressors import language_model
+from lmic import language_model
 import random
 
 filename = 'seq_file'
